@@ -33,7 +33,7 @@ export const RedButton = ({ onClick, pressed }: Props) => {
           fill="white"
           textAnchor="middle"
         >
-          DO NOT PRESS
+          DO NOT CLICK
         </text>
       </g>
 
@@ -55,7 +55,7 @@ export const RedButton = ({ onClick, pressed }: Props) => {
           fill="white"
           textAnchor="middle"
         >
-          DO NOT PRESS
+          DO NOT CLICK
         </text>
       </g>
     </svg>
