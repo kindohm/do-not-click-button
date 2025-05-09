@@ -7,10 +7,12 @@ export const RedButton = ({ onClick, pressed }: Props) => {
   return (
     <svg
       id="bigRedButton"
-      width="80%"
-      height="80%"
+      width="100%"
+      height="100%"
       viewBox="0 0 200 200"
       xmlns="http://www.w3.org/2000/svg"
+      preserveAspectRatio="xMidYMid meet"
+      style={{ maxHeight: "60vh" }}
     >
       <g onClick={onClick} style={{ display: pressed ? "none" : "block" }}>
         <circle cx="100" cy="105" r="75" fill="#990000" />
