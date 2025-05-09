@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Page</title>
+  </head>
+  <body
+    style="
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background-color: #f0f0f0;
+      font-family: sans-serif;
+    "
+  >
+    <svg
+      id="bigRedButton"
+      width="80%"
+      height="80%"
+      viewBox="0 0 200 200"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <!-- Normal state group -->
+      <g id="buttonNormal">
+        <!-- Button shadow -->
+        <circle cx="100" cy="105" r="75" fill="#990000" />
+        <!-- Main button -->
+        <circle
+          cx="100"
+          cy="100"
+          r="75"
+          fill="#ff0000"
+          stroke="#cc0000"
+          stroke-width="2"
+        />
+        <!-- Text -->
+        <text
+          x="100"
+          y="105"
+          font-family="Arial"
+          font-size="18"
+          font-weight="bold"
+          fill="white"
+          text-anchor="middle"
+        >
+          DO NOT PRESS
+        </text>
+      </g>
+
+      <!-- Pressed state group (initially hidden) -->
+      <g id="buttonPressed" style="display: none">
+        <!-- Pressed button (flatter, moved down) -->
+        <circle
+          cx="100"
+          cy="105"
+          r="75"
+          fill="#cc0000"
+          stroke="#990000"
+          stroke-width="2"
+        />
+        <!-- Text (shifted down) -->
+        <text
+          x="100"
+          y="110"
+          font-family="Arial"
+          font-size="18"
+          font-weight="bold"
+          fill="white"
+          text-anchor="middle"
+        >
+          DO NOT PRESS
+        </text>
+      </g>
+    </svg>
+
+    <h1 id="resultText"></h1>
+
+    <script>
+      const button = document.getElementById("bigRedButton");
+      const normalState = document.getElementById("buttonNormal");
+      const pressedState = document.getElementById("buttonPressed");
+      const resultText = document.getElementById("resultText");
+
+      let fingerprint = null;
+
+        if (!document.cookie){
+            
+        }
+
+      // Generate a simple fingerprint based on browser info and timestamp
+      function generateFingerprint() {
+        const browserInfo = navigator.userAgent;
+        const screenInfo = `${screen.width}x${screen.height}`;
+        const timestamp = new Date().getTime();
+        const randomElement = Math.random().toString(36).substring(2, 15);
+
+        return btoa(
+          `${browserInfo}|${screenInfo}|${timestamp}|${randomElement}`
+        );
+      }
+
+      // Store fingerprint
+      const fingerprint = generateFingerprint();
+
+      // Function to send the POST request
+      function sendClickData() {
+        fetch(
+          "https://do-not-click-lambda.netlify.app/.netlify/functions/click",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ fingerprint: fingerprint }),
+          }
+        )
+          .then((response) => {
+            pressedState.style.display = "none";
+            normalState.style.display = "block";
+            return response.text();
+          })
+          .then((text) => {
+            console.log('text?', resultText);
+            resultText.innerHTML = text;
+          })
+          .catch((error) => console.error("Error recording click:", error));
+      }
+
+      button.addEventListener("mousedown", function () {
+        normalState.style.display = "none";
+        pressedState.style.display = "block";
+        sendClickData();
+      });
+
+      // For touch devices
+      button.addEventListener("touchstart", function (e) {
+        e.preventDefault();
+        normalState.style.display = "none";
+        pressedState.style.display = "block";
+        sendClickData();
+      });
+    </script>
+  </body>
+</html>
