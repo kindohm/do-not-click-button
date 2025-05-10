@@ -25,7 +25,7 @@ function App() {
     }
   }, [cookies, setCookie]);
 
-  const fingerprint = cookies['fingerprint'];
+  const fingerprint = cookies['fingerprint'] ?? Date.now.toString();
 
   const buttonClicked = async () => {
     setButtonPressed(true);

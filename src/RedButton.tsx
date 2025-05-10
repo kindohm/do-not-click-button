@@ -14,7 +14,7 @@ export const RedButton = ({ onClick, pressed }: Props) => {
       preserveAspectRatio="xMidYMid meet"
       style={{ maxHeight: "60vh" }}
     >
-      <g onClick={onClick} style={{ display: pressed ? "none" : "block" }}>
+      <g onClick={onClick} style={{ display: pressed ? "none" : "block", cursor: 'pointer' }}>
         <circle cx="100" cy="105" r="75" fill="#990000" />
         <circle
           cx="100"
@@ -37,7 +37,7 @@ export const RedButton = ({ onClick, pressed }: Props) => {
         </text>
       </g>
 
-      <g style={{ display: pressed ? "block" : "none" }}>
+      <g style={{ display: pressed ? "block" : "none", cursor: 'pointer' }}>
         <circle
           cx="100"
           cy="105"
